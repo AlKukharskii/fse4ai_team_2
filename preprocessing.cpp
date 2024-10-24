@@ -2,6 +2,7 @@
 #include <iostream>
 #include <filesystem>
 #include <string>
+#include <stdint.h>
 
 using namespace std;
 using namespace cv;
@@ -32,8 +33,15 @@ int main(int argc, char** argv) {
     Mat resized_image;
     resize(image, resized_image, Size(224, 224), INTER_LINEAR);
 
+    // Create the input directory if it doesn't exist
+    string output_dir = "input";
+    if (!fs::exists(output_dir)) {
+        fs::create_directory(output_dir);
+        cout << "Created directory: " << output_dir << endl;
+    }
+    
     // Save the resized image as resized_image.jpg in the same directory
-    string output_path = input_dir + "/resized_image.jpg";
+    string output_path = output_dir + "/resized_image.jpg";
     imwrite(output_path, resized_image);
 
     cout << "Saved resized image to: " << output_path << endl;

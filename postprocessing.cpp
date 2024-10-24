@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
     // Add the prediction as a label on the image
     Point org(1, 30);  // Text position on the image
     putText(image, prediction, org, FONT_HERSHEY_SIMPLEX, 1.0,
-            Scalar(51, 153, 255), 2, LINE_AA);
+            Scalar(51, 153, 255), 0.5, LINE_AA);
 
     // Ensure the output directory exists
     fs::create_directory("output");

@@ -1,10 +1,9 @@
 # Variables for paths
-SRC_DIR := /usr/src/mobilenetv2
 BUILD_DIR := /usr/src/app
 PYTHON_REQS := requirements.txt
 
 # Default target: Install prerequisites and build everything
-all: build
+all: prereqs build
 
 # Target to install all prerequisites
 prereqs:
@@ -19,9 +18,7 @@ prereqs:
 		python3 \
 		python3-pip && \
 		apt-get clean
-	git clone https://github.com/yakhyo/mobilenetv2-pytorch.git $(SRC_DIR)
-	cd $(SRC_DIR) && pip3 install -r $(PYTHON_REQS)
-
+	ln -s /usr/bin/python3 /usr/bin/python
 # Target to build C++ executables for preprocessing and postprocessing
 build:
 	@echo "Building C++ executables..."
@@ -37,4 +34,4 @@ clean:
 # Add test target 
 test:
 	@echo "Running tests..."
-
+	python -m unittest discover -s tests

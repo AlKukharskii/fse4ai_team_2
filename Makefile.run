@@ -1,0 +1,7 @@
+# Makefile.run
+
+.PHONY: run
+
+run:
+	@echo "Running the pipeline..."
+	INPUT_DIR=$(INPUT_DIR) OUTPUT_DIR=$(OUTPUT_DIR) python main.py

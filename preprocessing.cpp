@@ -12,8 +12,8 @@ int main()
  Mat image = imread("image.jpg");
  
  // let's downscale the image using new  width and height
- int down_width = 300;
- int down_height = 200;
+ int down_width = 224;
+ int down_height = 224;
  Mat resized_down;
 
  //resize down

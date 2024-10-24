@@ -36,7 +36,7 @@ def main(resized_image_path, output_file_path):
 
         # Write output in text file
         with open(output_file_path, "w") as f:
-            f.write(f"Predicted class index: {predicted_class.item()}\n")
+          # f.write(f"Predicted class index: {predicted_class.item()}\n")
             f.write(f"Predicted class label: {predicted_label}\n")
 
     # Call the inference function

@@ -11,16 +11,6 @@ RUN apt-get update && apt-get install -y \
     libopencv-dev \
     && apt-get clean
 
-# Install Python3 and pip
-RUN apt-get install -y python3 python3-pip
-
-# Clone the MobileNetV2 repository
-RUN git clone https://github.com/yakhyo/mobilenetv2-pytorch.git /usr/src/mobilenetv2
-WORKDIR /usr/src/mobilenetv2
-
-# Install Python dependencies from requirements.txt
-RUN pip3 install -r requirements.txt
-
 # Copy the primary Makefile for building and testing
 COPY Makefile /usr/src/app/Makefile
 

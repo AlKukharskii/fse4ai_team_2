@@ -1,7 +1,23 @@
-# Makefile.run
+# Use environment variables for input and output paths (default values provided)
+INPUT_DIR ?= $(shell echo $$INPUT_DIR) 
 
-.PHONY: run
+# Preprocessing: Run C++ code to resize raw images
+preprocess:
+	@echo "Running C++ preprocessing..."
+	@echo "$(INPUT_DIR)"
+	./preprocessing.out --input "$(INPUT_DIR)"
 
-run:
-	@echo "Running the pipeline..."
-	INPUT_DIR=$(INPUT_DIR) OUTPUT_DIR=$(OUTPUT_DIR) python main.py
+# Inference: Run the Python script to make predictions
+inference: preprocess 
+	@echo "Running Python inference..."
+	python3 ./main.py
+
+# Postprocessing: Use C++ code for optional output handling
+postprocess: inference
+	@echo "Running C++ postprocessing..."
+	./postprocessing.out 
+
+# Full pipeline: Preprocess -> Inference -> Postprocess
+run: preprocess inference postprocess
+	@echo "Pipeline completed successfully."
+

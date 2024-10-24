@@ -34,4 +34,4 @@ clean:
 # Add test target 
 test:
 	@echo "Running tests..."
-	python -m unittest discover -s tests
+	python -m unittest test_main.py

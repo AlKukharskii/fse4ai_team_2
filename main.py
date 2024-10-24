@@ -33,19 +33,22 @@ def main(resized_image_path, output_file_path):
 
         _, predicted_class = output.max(1)
         predicted_label = IMAGENET_CATEGORIES[predicted_class.item()]
-
+        
         # Write output in text file
         with open(output_file_path, "w") as f:
-          # f.write(f"Predicted class index: {predicted_class.item()}\n")
             f.write(f"Predicted class label: {predicted_label}\n")
 
+    # Input directory
+    input_dir = "input"
+    resized_image_path = os.path.join(input_dir, "resized_image.jpg")
+    
+    # Output directory
+    output_dir = "output_raw"
+    os.makedirs(output_dir, exist_ok=True)  # Create output_raw if it doesn't exist
+    output_file_path = os.path.join(output_dir, "output_prediction.txt")
+    
     # Call the inference function
     inference(model, resized_image_path, output_file_path)
 
 if __name__ == "__main__":
-    # Retrieve input and output paths from environment variables
-    input_path = os.getenv('INPUT_DIR', '/input_raw/resized_image.jpg')
-    output_path = os.getenv('OUTPUT_DIR', '/output/output_prediction.txt')
-
-    # Run the main function with the retrieved paths
     main(input_path, output_path)

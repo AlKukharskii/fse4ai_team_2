@@ -1,0 +1,24 @@
+# Use environment variables for input and output paths (default values provided)
+INPUT_DIR ?= $(shell echo $$INPUT_DIR) 
+
+# Preprocessing: Run C++ code to resize raw images
+preprocess:
+	@echo "Running C++ preprocessing..."
+	@echo "$(INPUT_DIR)"
+	chmod -R 777 "$(INPUT_DIR)"
+	./preprocessing.out --input "$(INPUT_DIR )"
+
+# Inference: Run the Python script to make predictions
+inference:
+	@echo "Running Python inference..."
+	PYTHONPATH=/usr/src/app python3 main.py
+
+# Postprocessing: Use C++ code for optional output handling
+postprocess:
+	@echo "Running C++ postprocessing..."
+	./postprocessing.out 
+
+# Full pipeline: Preprocess -> Inference -> Postprocess
+run: preprocess inference postprocess
+	@echo "Pipeline completed successfully."
+

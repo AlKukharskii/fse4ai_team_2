@@ -6,15 +6,15 @@ ENV DEBIAN_FRONTEND=noninteractive \
     TZ=Etc/UTC
 
 # Copy the Makefile and all necessary C++ files into the working directory
-COPY Makefile /usr/src/app/Makefile
-COPY Makefile.run /usr/src/app/Makefile.run
-COPY preprocessing.cpp /usr/src/app/preprocessing.cpp
-COPY postprocessing.cpp /usr/src/app/postprocessing.cpp
-COPY main.py /usr/src/app/main.py
-COPY test_main.py /usr/src/app/tests/test_main.py
+COPY Makefile /app/Makefile
+COPY Makefile.run /app/Makefile.run
+COPY preprocessing.cpp /app/preprocessing.cpp
+COPY postprocessing.cpp /app/postprocessing.cpp
+COPY main.py /app/main.py
+COPY test_main.py /app/test_main.py
 
 # Set the working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Install any project-specific dependencies and compile C++ components
 RUN make
@@ -23,13 +23,13 @@ RUN make
 RUN git clone https://github.com/yakhyo/mobilenetv2-pytorch.git /usr/src/app/model
 
 # Set the working directory
-WORKDIR /usr/src/app/model
+WORKDIR /app/model
 
 # Install Python dependencies from requirements.txt
 RUN pip3 install -r requirements.txt
 
 # Set the working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Run the tests to ensure everything is working correctly
 RUN make test

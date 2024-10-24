@@ -13,7 +13,6 @@ This project implements a multiclass image classification pipeline using a pretr
 
 ### Prerequisites
 - Docker
-- NVIDIA GPU with CUDA (for processing)
 
 ### Installation and Setup
 1. Clone the Repository:

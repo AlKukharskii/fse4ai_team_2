@@ -29,7 +29,7 @@ build:
 # Add test target 
 test:
 	@echo "Running tests..."
-	python -m unittest test_main.py
+	python3 -m unittest test_main.py
 
 # Clean target to remove built files or unnecessary directories
 clean:

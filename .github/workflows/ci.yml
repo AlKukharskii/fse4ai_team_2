@@ -16,6 +16,7 @@ jobs:
         run: make prereqs
 
   build:
+    needs: prereqs
     runs-on: ubuntu-latest
     steps:
       - name: Build Project

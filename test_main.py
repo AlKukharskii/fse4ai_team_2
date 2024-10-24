@@ -17,7 +17,7 @@ class TestMainFunction(unittest.TestCase):
 
         mock_preprocess_image.return_value = mock.MagicMock()
 
-        main.main('/input_raw/resized_image.jpg', '/output/output_prediction.txt')
+        main.main('/input/resized_image.jpg', '/output_raw/output_prediction.txt')
 
         mock_model.load_state_dict.assert_called()
         mock_model.eval.assert_called()
@@ -32,7 +32,7 @@ class TestMainFunction(unittest.TestCase):
         with patch('main.preprocess_image'), \
              patch('main.MobileNetV2'), \
              patch('main.IMAGENET_CATEGORIES', {0: 'class0'}):
-            main.main('/input_raw/resized_image.jpg', '/output/output_prediction.txt')
+            main.main('/input/resized_image.jpg', '/output_raw/output_prediction.txt')
             mock_file.assert_called_with('/output/output_prediction.txt', 'w')
 
     @patch('main.MobileNetV2')
@@ -44,7 +44,7 @@ class TestMainFunction(unittest.TestCase):
         mock_model.load_state_dict.side_effect = FileNotFoundError
 
         with self.assertRaises(FileNotFoundError):
-            main.main('/input_raw/resized_image.jpg', '/output/output_prediction.txt')
+            main.main('/input/resized_image.jpg', '/output_raw/output_prediction.txt')
 
     def test_prediction_output(self):
         # Mock functions to control the output
@@ -60,7 +60,7 @@ class TestMainFunction(unittest.TestCase):
             mock_output.max.return_value = (None, mock.Mock(item=lambda: 0))
             mock_model.__call__.return_value = mock_output
 
-            main.main('/input_raw/resized_image.jpg', '/output/output_prediction.txt')
+            main.main('/input/resized_image.jpg', '/output_raw/output_prediction.txt')
 
             # Check that the output file was written with the expected content
             mock_file().write.assert_called_with('Predicted class label: class0\n')

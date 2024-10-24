@@ -2,34 +2,28 @@
 
 name: CI/CD Pipeline
 
-stages:
-  - prereqs
-  - build
-  - test
-
 on:
   push:
     branches: [ test ]
   pull_request:
     branches: [ main ]
 
-prereqs-job:
-  stage: prereqs
-  steps:
-    - name: Install Prereqs
-      run: make prereqs
+jobs:
+  prereqs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Prereqs
+        run: make prereqs
 
-build-job:
-  stage: build
-  needs: prereqs
-  steps:
-    - name: Build Project
-      run: make build
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Project
+        run: make build
 
-test-job:
-  stage: test
-  needs: build
-  steps:
-    - name: Run Tests
-      run: make test
-
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Tests
+        run: make test

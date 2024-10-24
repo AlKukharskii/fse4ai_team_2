@@ -94,8 +94,6 @@ Acknowledgments to data sources, libraries, and frameworks used in this project,
 - Docker for containerization, ensuring a consistent runtime environment.
 - TensorFlow for model implementation and training.
 - OpenCV for image preprocessing and handling.
-- NVIDIA for providing CUDA and GPU support for accelerated processing.
 - Ubuntu 20.04 as the base environment for building the project.
 - GNU Make for orchestrating the build, test, and run processes.
 - GitHub Actions for providing CI/CD for building and testing the project.
-- Contributors of the project: Aibek Akhmetkazy, Hassan Iftikhar, Aleksandr Kukharskii, Rinat Prochii.

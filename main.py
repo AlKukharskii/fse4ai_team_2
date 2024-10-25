@@ -7,39 +7,39 @@ from PIL import Image
 from nets import MobileNetV2
 from assets.meta import IMAGENET_CATEGORIES
 
+
+# Assume the image is already resized; no need for transforms.Resize
+def preprocess_image(resized_image_path):
+    transform = transforms.Compose([
+        transforms.ToTensor(),  # Convert the image to a PyTorch tensor
+        transforms.Normalize(
+            mean=[0.485, 0.456, 0.406],  # Normalize using the mean and std of ImageNet
+            std=[0.229, 0.224, 0.225]
+        ),
+    ])
+
+    image = Image.open(resized_image_path)
+    image = transform(image).unsqueeze(0)  # Add a batch dimension
+    return image, image.shape, type(image)
+
+def inference(model, resized_image_path, output_file_path):
+    model.eval()
+
+    input_image, image_shape, image_type = preprocess_image(resized_image_path)
+    with torch.no_grad():
+        output = model(input_image)
+
+    _, predicted_class = output.max(1)
+    predicted_label = IMAGENET_CATEGORIES[predicted_class.item()]
+    # Write output in text file
+    with open(output_file_path, "w") as f:
+        f.write(predicted_label)
+    return predicted_label
+
 def main():
     model = MobileNetV2()
-    model.load_state_dict(torch.load("./model/weights/mobilenetv2.pt"))  # weights ported from torchvision
+    model.load_state_dict(torch.load("./model/weights/mobilenetv2.pt", weights_only=True))  # weights ported from torchvision
     model.float()  # converting weights to float32
-
-    # Assume the image is already resized; no need for transforms.Resize
-    def preprocess_image(resized_image_path):
-        transform = transforms.Compose([
-            transforms.ToTensor(),  # Convert the image to a PyTorch tensor
-            transforms.Normalize(
-                mean=[0.485, 0.456, 0.406],  # Normalize using the mean and std of ImageNet
-                std=[0.229, 0.224, 0.225]
-            ),
-        ])
-
-        image = Image.open(resized_image_path)
-        image = transform(image).unsqueeze(0)  # Add a batch dimension
-        return image
-
-    def inference(model, resized_image_path, output_file_path):
-        model.eval()
-
-        input_image = preprocess_image(resized_image_path)
-        with torch.no_grad():
-            output = model(input_image)
-
-        _, predicted_class = output.max(1)
-        predicted_label = IMAGENET_CATEGORIES[predicted_class.item()]
-        
-        # Write output in text file
-        with open(output_file_path, "w") as f:
-            f.write(predicted_label)
-
     # Input directory
     input_dir = "input"
     resized_image_path = os.path.join(input_dir, "resized_image.jpg")

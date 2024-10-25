@@ -1,0 +1,42 @@
+# .github/workflows/ci.yml
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ test ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Clean up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/lib/android
+          sudo apt-get clean
+
+      - name: Build Docker Image
+        run: docker build -t classifier .
+
+      - name: Run Pipeline in Docker Container
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/input_raw:/usr/src/app/input_raw" \
+            -v "${{ github.workspace }}/output:/usr/src/app/output" \
+            -e INPUT_DIR=input_raw \
+            classifier

@@ -7,6 +7,10 @@ preprocess:
 	@echo "$(INPUT_DIR)"
 	./preprocessing.out --input "$(INPUT_DIR)"
 
+test:
+	@echo "Running unit tests..."
+	python3 -m unittest test_main.py
+
 # Inference: Run the Python script to make predictions
 inference: preprocess 
 	@echo "Running Python inference..."
@@ -18,6 +22,6 @@ postprocess: inference
 	./postprocessing.out 
 
 # Full pipeline: Preprocess -> Inference -> Postprocess
-run: preprocess inference postprocess
+run: preprocess test inference postprocess
 	@echo "Pipeline completed successfully."
 

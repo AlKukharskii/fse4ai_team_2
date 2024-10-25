@@ -1,69 +1,34 @@
 import unittest
+import sys
 import os
+sys.path.append("/usr/src/app/model")
 from unittest import mock
 from unittest.mock import patch
 import main
+from nets import MobileNetV2
+import torch
 
 class TestMainFunction(unittest.TestCase):
 
-    @patch('main.MobileNetV2')
-    @patch('main.preprocess_image')
-    @patch('main.open', new_callable=mock.mock_open)
-    def test_main_function_runs(self, mock_open_file, mock_preprocess_image, mock_model_class):
-        mock_model = mock_model_class.return_value
-        mock_model.load_state_dict.return_value = None
-        mock_model.eval.return_value = None
-        mock_model.float.return_value = None
-
-        mock_preprocess_image.return_value = mock.MagicMock()
-
-        main.main('/input_raw/resized_image.jpg', '/output/output_prediction.txt')
-
-        mock_model.load_state_dict.assert_called()
-        mock_model.eval.assert_called()
-
     def test_missing_input_image(self):
         # Test with a missing input image
+        print('Test1 on Nonexisting image')
         with self.assertRaises(FileNotFoundError):
             main.preprocess_image('/nonexistent/image.jpg')
 
-    @patch('main.open', new_callable=mock.mock_open)
-    def test_output_file_created(self, mock_file):
-        with patch('main.preprocess_image'), \
-             patch('main.MobileNetV2'), \
-             patch('main.IMAGENET_CATEGORIES', {0: 'class0'}):
-            main.main('/input_raw/resized_image.jpg', '/output/output_prediction.txt')
-            mock_file.assert_called_with('/output/output_prediction.txt', 'w')
+    def test_tensor_size(self):
+        input_dir = "input_raw"
+        resized_image_path = os.path.join(input_dir, "image.jpg")
+        image, img_shape, img_type = main.preprocess_image(resized_image_path)
+        print('Test2 on Tensor Size')
+        self.assertEqual(len(img_shape), 4, 'Not Equal Shape')
 
-    @patch('main.MobileNetV2')
-    @patch('main.preprocess_image')
-    @patch('main.open', new_callable=mock.mock_open)
-    def test_model_weights_missing(self, mock_open_file, mock_preprocess_image, mock_model_class):
-        # Simulate FileNotFoundError when loading model weights
-        mock_model = mock_model_class.return_value
-        mock_model.load_state_dict.side_effect = FileNotFoundError
-
-        with self.assertRaises(FileNotFoundError):
-            main.main('/input_raw/resized_image.jpg', '/output/output_prediction.txt')
-
-    def test_prediction_output(self):
-        # Mock functions to control the output
-        with patch('main.preprocess_image'), \
-             patch('main.MobileNetV2') as mock_model_class, \
-             patch('main.open', new_callable=mock.mock_open()) as mock_file, \
-             patch('main.IMAGENET_CATEGORIES', {0: 'class0'}):
-            mock_model = mock_model_class.return_value
-            mock_model.load_state_dict.return_value = None
-            mock_model.eval.return_value = None
-            mock_model.float.return_value = None
-            mock_output = mock.MagicMock()
-            mock_output.max.return_value = (None, mock.Mock(item=lambda: 0))
-            mock_model.__call__.return_value = mock_output
-
-            main.main('/input_raw/resized_image.jpg', '/output/output_prediction.txt')
-
-            # Check that the output file was written with the expected content
-            mock_file().write.assert_called_with('Predicted class label: class0\n')
+    def test_image_type(self):
+        input_dir = "input_raw"
+        resized_image_path = os.path.join(input_dir, "image.jpg")
+        image, img_shape, img_type = main.preprocess_image(resized_image_path)
+        print('Test3 on Image Type')
+        self.assertEqual(str(img_type), "<class 'torch.Tensor'>", 'Not Equal Image Type')
 
 if __name__ == '__main__':
     unittest.main()

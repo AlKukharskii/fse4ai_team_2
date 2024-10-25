@@ -11,7 +11,7 @@ COPY Makefile.run /usr/src/app/Makefile.run
 COPY preprocessing.cpp /usr/src/app/preprocessing.cpp
 COPY postprocessing.cpp /usr/src/app/postprocessing.cpp
 COPY main.py /usr/src/app/main.py
-COPY test_main.py /usr/src/app/tests/test_main.py
+COPY test_main.py /usr/src/app/test_main.py
 
 # Set the working directory
 WORKDIR /usr/src/app
@@ -30,9 +30,6 @@ RUN pip3 install -r requirements.txt
 
 # Set the working directory
 WORKDIR /usr/src/app
-
-# Run the tests to ensure everything is working correctly
-RUN make test
 
 # Set the entrypoint to run the pipeline via Makefile.run
 ENTRYPOINT ["make", "-f", "Makefile.run"]

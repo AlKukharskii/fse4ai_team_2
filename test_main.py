@@ -1,39 +1,47 @@
 import unittest
 import sys
+import os
 sys.path.append("/usr/src/app/model")
 from unittest import mock
 from unittest.mock import patch
-from main import main
+import main
 from nets import MobileNetV2
 import torch
 
 class TestMainFunction(unittest.TestCase):
 
+    def __init__(self):
+        self.input_dir = "input_raw"
+        self.resized_image_path = os.path.join(self.input_dir, "image.jpg")
+        self.output_dir = "output_raw"
+        os.makedirs(self.output_dir, exist_ok=True)  # Create output_raw if it doesn't exist
+        self.output_file_path = os.path.join(self.output_dir, "output_prediction.txt")
+
     def test_missing_input_image(self):
         # Test with a missing input image
         with self.assertRaises(FileNotFoundError):
-            main().preprocess_image('/nonexistent/image.jpg')
+            main.preprocess_image('/nonexistent/image.jpg')
 
     def test_tensor_size(self):
-        image, img_shape, img_type = main().preprocess_image('/input/resized_image.jpg')
+        image, img_shape, img_type = main.preprocess_image(self.resized_image_path)
         print(img_shape, img_type)
-        self.assertNotEquals(img_shape, (1,2,3), 'Not Equal Shape')
+        self.assertNotEqual(img_shape, (1,2,3), 'Equal Shape')
 
     def test_image_type(self):
-        image, img_shape, img_type = main().preprocess_image('/input/resized_image.jpg')
+        image, img_shape, img_type = main.preprocess_image(self.resized_image_path)
         print(img_shape, img_type)
-        self.assertNotEquals(img_type, int, 'Not Equal Image Type')
+        self.assertNotEqual(img_type, int, 'Equal Image Type')
 
     def test_image_class(self):
         model = MobileNetV2()
-        model.load_state_dict(torch.load("./model/weights/mobilenetv2.pt", weights_only=True))  # weights ported from torchvision
+        model.load_state_dict(torch.load("/Users/aibekakhmetkazy/PycharmProjects/fse4ai_team_2/mobilenetv2-pytorch/weights/mobilenetv2.pt", weights_only=True))  # weights ported from torchvision
         model.float()
 
-        predicted_label = main().inference(model, '/input/resized_image.jpg',
-                         '/output_raw/output_prediction.txt')
+        predicted_label = main.inference(model, self.resized_image_path,
+                         self.output_file_path)
 
         print('Label in output:',predicted_label)
-        self.assertNotEquals(predicted_label, 'Aar', 'Wrong classification')
+        self.assertNotEqual(predicted_label, 'House', 'Correct classification')
 
 if __name__ == '__main__':
     unittest.main()

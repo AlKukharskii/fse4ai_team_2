@@ -28,8 +28,7 @@ build:
 
 preprocess:
 	@echo "Running C++ preprocessing..."
-	@echo "$(INPUT_DIR)"
-	./preprocessing.out --input "$(INPUT_DIR)"
+	./preprocessing.out --input "input_raw"
 
 # Add test target 
 test:

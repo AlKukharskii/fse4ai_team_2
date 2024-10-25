@@ -37,7 +37,7 @@ class TestMainFunction(unittest.TestCase):
         output_file_path = os.path.join(output_dir, "output_prediction.txt")
 
         model = MobileNetV2()
-        model.load_state_dict(torch.load(".model/weights/mobilenetv2.pt", weights_only=True))  # weights ported from torchvision
+        model.load_state_dict(torch.load("./model/weights/mobilenetv2.pt", weights_only=True))  # weights ported from torchvision
         model.float()
 
         predicted_label = main.inference(model, resized_image_path,

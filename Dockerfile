@@ -26,7 +26,7 @@ RUN git clone https://github.com/yakhyo/mobilenetv2-pytorch.git /usr/src/app/mod
 WORKDIR /app/model
 
 # Install Python dependencies from requirements.txt
-RUN pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Set the working directory
 WORKDIR /app

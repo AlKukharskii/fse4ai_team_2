@@ -26,10 +26,6 @@ build:
 	gcc preprocessing.cpp `pkg-config --cflags --libs opencv4` -std=c++17 -lstdc++ -o preprocessing.out
 	gcc postprocessing.cpp `pkg-config --cflags --libs opencv4` -std=c++17 -lstdc++ -o postprocessing.out
 
-preprocess:
-	@echo "Running C++ preprocessing..."
-	./preprocessing.out --input "input_raw"
-
 # Add test target 
 test:
 	@echo "Running tests..."

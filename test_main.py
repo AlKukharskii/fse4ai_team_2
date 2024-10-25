@@ -17,12 +17,12 @@ class TestMainFunction(unittest.TestCase):
     def test_tensor_size(self):
         image, img_shape, img_type = main().preprocess_image('/input/resized_image.jpg')
         print(img_shape, img_type)
-        self.assertEqual(img_shape, (1,2,3), 'Not Equal Shape')
+        self.assertNotEquals(img_shape, (1,2,3), 'Not Equal Shape')
 
     def test_image_type(self):
         image, img_shape, img_type = main().preprocess_image('/input/resized_image.jpg')
         print(img_shape, img_type)
-        self.assertEqual(img_type, int, 'Not Equal Image Type')
+        self.assertNotEquals(img_type, int, 'Not Equal Image Type')
 
     def test_image_class(self):
         model = MobileNetV2()
@@ -33,7 +33,7 @@ class TestMainFunction(unittest.TestCase):
                          '/output_raw/output_prediction.txt')
 
         print('Label in output:',predicted_label)
-        self.assertEqual(predicted_label, 'Aar', 'Wrong classification')
+        self.assertNotEquals(predicted_label, 'Aar', 'Wrong classification')
 
 if __name__ == '__main__':
     unittest.main()

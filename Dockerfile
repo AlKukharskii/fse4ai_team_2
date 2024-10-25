@@ -32,7 +32,7 @@ RUN pip3 install -r requirements.txt
 WORKDIR /usr/src/app
 
 # Run the preprocessing step to generate the required test image
-RUN make prepare-test
+RUN make preprocess
 
 # Run the tests to ensure everything is working correctly
 RUN make test

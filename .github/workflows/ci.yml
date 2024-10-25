@@ -34,5 +34,4 @@ jobs:
         run: docker build -t classifier .
 
       - name: Run Tests in Docker Container
-        run: |
-          docker run --rm -w /usr/src/app classifier make test
+        run: docker run -it --rm -v "$(pwd)"/input_raw:/usr/src/app/input_raw -v "$(pwd)"/output:/usr/src/app/output -e INPUT_DIR=input_raw classifier

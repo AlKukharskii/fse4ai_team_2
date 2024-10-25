@@ -32,10 +32,11 @@ RUN pip3 install -r requirements.txt
 WORKDIR /usr/src/app
 
 # Run the tests to ensure everything is working correctly
-# RUN make test
+RUN make test
 
 # Set the entrypoint to run the pipeline via Makefile.run
 ENTRYPOINT ["make", "-f", "Makefile.run"]
 
 # Default command to run the pipeline with default input/output paths
 CMD ["run", "INPUT_DIR=input_raw"]
+

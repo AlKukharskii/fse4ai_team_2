@@ -21,16 +21,14 @@ class TestMainFunction(unittest.TestCase):
         resized_image_path = os.path.join(input_dir, "image.jpg")
         image, img_shape, img_type = main.preprocess_image(resized_image_path)
         print('Test2 on Tensor Size')
-        print(len(img_shape))
-        self.assertNotEqual(img_shape, torch.Size([1, 3, 3031, 5184]), 'Not equal Shape')
+        self.assertEqual(len(img_shape), 4, 'Not Equal Shape')
 
     def test_image_type(self):
         input_dir = "input_raw"
         resized_image_path = os.path.join(input_dir, "image.jpg")
         image, img_shape, img_type = main.preprocess_image(resized_image_path)
         print('Test3 on Image Type')
-        print(img_type, str(img_type))
-        self.assertEqual(img_type, "<class 'torch.Tensor'>", 'Equal Image Type')
+        self.assertEqual(str(img_type), "<class 'torch.Tensor'>", 'Not Equal Image Type')
 
 if __name__ == '__main__':
     unittest.main()

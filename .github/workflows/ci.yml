@@ -36,7 +36,7 @@ jobs:
       - name: Run Pipeline in Docker Container
         run: |
           docker run --rm \
-            -v "${{ runner.os }}/input_raw:/usr/src/app/input_raw" \
-            -v "${{ runner.os }}/output:/usr/src/app/output" \
+            -v "${{ github.workspace }}/input_raw:/usr/src/app/input_raw" \
+            -v "${{ github.workspace }}/output:/usr/src/app/output" \
             -e INPUT_DIR=input_raw \
             classifier

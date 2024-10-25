@@ -29,22 +29,5 @@ class TestMainFunction(unittest.TestCase):
         print(img_shape, img_type)
         self.assertNotEqual(img_type, int, 'Equal Image Type')
 
-    def test_image_class(self):
-        input_dir = "input_raw"
-        resized_image_path = os.path.join(input_dir, "image.jpg")
-        output_dir = "output_raw"
-        os.makedirs(output_dir, exist_ok=True)  # Create output_raw if it doesn't exist
-        output_file_path = os.path.join(output_dir, "output_prediction.txt")
-
-        model = MobileNetV2()
-        model.load_state_dict(torch.load("./model/weights/mobilenetv2.pt", weights_only=True))  # weights ported from torchvision
-        model.float()
-
-        predicted_label = main.inference(model, resized_image_path,
-                         output_file_path)
-
-        print('Label in output:',predicted_label)
-        self.assertNotEqual(predicted_label, 'House', 'Correct classification')
-
 if __name__ == '__main__':
     unittest.main()

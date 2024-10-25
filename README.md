@@ -21,25 +21,29 @@ This project implements a multiclass image classification pipeline using a pretr
    cd fse4ai_team_2
    ```
 
-2. Build the Docker Image:
+2. In Dockerfile, comment RUN make test, if you do not want to run tests
    ```bash
-   docker build -t image-classification .
+   vim Dockerfile
    ```
 
-3. Run Makefile Targets:
+3. Build the Docker Image:
+   ```bash
+   docker build -t classifier .
+   ```
+
+4. Run Docker:
    Install dependencies and compile necessary components:
    ```bash
-   docker run --rm image-classification make prereqs
-   docker run --rm image-classification make build
+   docker run -it --rm -v "$(pwd)"/input_raw:/usr/src/app/input_raw -v "$(pwd)"/output:/usr/src/app/output -e INPUT_DIR=input_raw classifier
    ```
 
-### Testing the Setup
+<!-- ### Testing the Setup
 Verify that all system components function correctly:
 ```bash
 docker run --rm image-classification make test
-```
+``` -->
 
-## Usage
+<!-- ## Usage
 
 ### Docker Container Execution
 Execute the project within Docker, automating the full workflow from preprocessing to postprocessing:
@@ -62,7 +66,7 @@ Execute the project within Docker, automating the full workflow from preprocessi
 Alternatively, you can execute the entire pipeline using the default command:
 ```bash
 docker run --rm -v $(pwd)/input_raw:/input_raw -v $(pwd)/output:/output image-classification
-```
+``` -->
 
 ## Makefile Details
 The project provides two Makefiles:
@@ -70,16 +74,20 @@ The project provides two Makefiles:
 ### Makefile (Build System)
 This Makefile is used to compile all binary executables and/or libraries necessary for the project. The Dockerfile relies on this Makefile to build the project inside a Docker image. It includes the following targets:
 
+- **all**: Installs all dependencies and compiles all executables, i.e. steps prereqs and build.
 - **prereqs**: Installs all dependencies, compiles, and installs necessary components.
 - **build**: Compiles all necessary executables, including preprocessing (`preprocessing.out`) and postprocessing (`postprocessing.out`) executables.
 - **test**: Tests all steps of the pipeline, including verifying the correctness of preprocessing, processing, and postprocessing.
+- **clean**: Clean target to remove built files or unnecessary directories.
+
 
 ### Makefile.run (Entry Point for Docker Image)
 This Makefile serves as an entry point for running the pipeline in the Docker container. It orchestrates the following steps:
 
 - **preprocess**: Converts all files in `/input_raw` to a standardized format in `/input`.
-- **process**: Uses the neural network model to classify images from `/input` and writes results to `/output_raw`.
+- **inference**: Uses the neural network model to classify images from `/input` and writes results to `/output_raw`.
 - **postprocess**: Annotates images using results from `/output_raw` and saves them in `/output`.
+- **run**: Run the whole pipeline, i.e. it will execute preprocess, then inference, and, finally, postprocess.
 
 ## Example Input and Output
 - **Input**: The input is a raw image (`image.jpg`), which is first downscaled to `224x224` pixels in the preprocessing step.

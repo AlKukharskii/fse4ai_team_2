@@ -10,28 +10,32 @@ import torch
 
 class TestMainFunction(unittest.TestCase):
 
-    input_dir = "input_raw"
-    resized_image_path = os.path.join(input_dir, "image.jpg")
-    output_dir = "output_raw"
-    os.makedirs(output_dir, exist_ok=True)  # Create output_raw if it doesn't exist
-    output_file_path = os.path.join(output_dir, "output_prediction.txt")
-
     def test_missing_input_image(self):
         # Test with a missing input image
         with self.assertRaises(FileNotFoundError):
             main.preprocess_image('/nonexistent/image.jpg')
 
-    def test_tensor_size(self, resized_image_path):
+    def test_tensor_size(self):
+        input_dir = "input_raw"
+        resized_image_path = os.path.join(input_dir, "image.jpg")
         image, img_shape, img_type = main.preprocess_image(resized_image_path)
         print(img_shape, img_type)
         self.assertNotEqual(img_shape, (1,2,3), 'Equal Shape')
 
-    def test_image_type(self, resized_image_path):
+    def test_image_type(self):
+        input_dir = "input_raw"
+        resized_image_path = os.path.join(input_dir, "image.jpg")
         image, img_shape, img_type = main.preprocess_image(resized_image_path)
         print(img_shape, img_type)
         self.assertNotEqual(img_type, int, 'Equal Image Type')
 
-    def test_image_class(self, resized_image_path, output_file_path):
+    def test_image_class(self):
+        input_dir = "input_raw"
+        resized_image_path = os.path.join(input_dir, "image.jpg")
+        output_dir = "output_raw"
+        os.makedirs(output_dir, exist_ok=True)  # Create output_raw if it doesn't exist
+        output_file_path = os.path.join(output_dir, "output_prediction.txt")
+
         model = MobileNetV2()
         model.load_state_dict(torch.load(".model/weights/mobilenetv2.pt", weights_only=True))  # weights ported from torchvision
         model.float()

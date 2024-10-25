@@ -12,6 +12,7 @@ class TestMainFunction(unittest.TestCase):
 
     def test_missing_input_image(self):
         # Test with a missing input image
+        print('Test1 on Nonexisting image')
         with self.assertRaises(FileNotFoundError):
             main.preprocess_image('/nonexistent/image.jpg')
 
@@ -19,15 +20,17 @@ class TestMainFunction(unittest.TestCase):
         input_dir = "input_raw"
         resized_image_path = os.path.join(input_dir, "image.jpg")
         image, img_shape, img_type = main.preprocess_image(resized_image_path)
-        print(img_shape, img_type)
-        self.assertNotEqual(img_shape, (1,2,3), 'Equal Shape')
+        print('Test2 on Tensor Size')
+        print(len(img_shape))
+        self.assertNotEqual(img_shape, torch.Size([1, 3, 3031, 5184]), 'Not equal Shape')
 
     def test_image_type(self):
         input_dir = "input_raw"
         resized_image_path = os.path.join(input_dir, "image.jpg")
         image, img_shape, img_type = main.preprocess_image(resized_image_path)
-        print(img_shape, img_type)
-        self.assertNotEqual(img_type, int, 'Equal Image Type')
+        print('Test3 on Image Type')
+        print(img_type, str(img_type))
+        self.assertEqual(img_type, "<class 'torch.Tensor'>", 'Equal Image Type')
 
 if __name__ == '__main__':
     unittest.main()

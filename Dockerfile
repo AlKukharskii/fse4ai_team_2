@@ -36,4 +36,3 @@ ENTRYPOINT ["make", "-f", "Makefile.run"]
 
 # Default command to run the pipeline with default input/output paths
 CMD ["run", "INPUT_DIR=input_raw"]
-
